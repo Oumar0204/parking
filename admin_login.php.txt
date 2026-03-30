@@ -1,0 +1,55 @@
+<?php
+session_start();
+require_once 'config.php';
+
+$message = "";
+
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    $username = trim($_POST["username"]);
+    $password = $_POST["password"];
+
+    $stmt = $pdo->prepare("SELECT * FROM users WHERE username = ? AND is_active = 1");
+    $stmt->execute([$username]);
+    $admin = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if ($admin && password_verify($password, $admin["password_hash"]) && $admin["is_admin"] == 1) {
+        $_SESSION["user_id"] = $admin["id_user"];
+        $_SESSION["username"] = $admin["username"];
+        $_SESSION["is_admin"] = $admin["is_admin"];
+        header("Location: dashboard_admin.php");
+        exit;
+    } else {
+        $message = "Identifiants administrateur invalides.";
+    }
+}
+?>
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Connexion administrateur</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+    <h1>Connexion administrateur</h1>
+</header>
+
+<div class="container">
+    <div class="card">
+        <?php if ($message): ?>
+            <div class="message error"><?= $message ?></div>
+        <?php endif; ?>
+
+        <form method="POST">
+            <input type="text" name="username" placeholder="Nom d'utilisateur admin" required>
+            <input type="password" name="password" placeholder="Mot de passe" required>
+            <button type="submit" class="btn">Se connecter</button>
+        </form>
+    </div>
+</div>
+
+</body>
+</html>
