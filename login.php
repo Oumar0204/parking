@@ -1,5 +1,13 @@
 <?php
 session_start();
+
+if (!isset($_SESSION['tentatives'])) {
+    $_SESSION['tentatives'] = 3;
+}
+
+if ($_SESSION['tentatives'] <= 0) {
+    die("Compte temporairement bloqué.");
+}
 require_once 'config.php';
 
 $message = "";
@@ -21,6 +29,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     } else {
         $message = "Identifiants invalides.";
     }
+    if ($user && password_verify($password, $user["password_hash"])) {
+    $_SESSION['tentatives'] = 3;
+} else {
+    $_SESSION['tentatives']--;
+}
 }
 ?>
 

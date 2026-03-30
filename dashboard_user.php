@@ -36,6 +36,7 @@ $waiting = $stmt2->fetch(PDO::FETCH_ASSOC);
 
 <div class="navbar">
     <a href="dashboard_user.php">Accueil</a>
+    <a href="reservation.php">Réserver une place</a>
     <a href="logout.php">Déconnexion</a>
 </div>
 

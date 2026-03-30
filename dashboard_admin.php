@@ -28,6 +28,7 @@ $waitingList = $pdo->query("
 
 <div class="navbar">
     <a href="dashboard_admin.php">Accueil admin</a>
+    <a href="reservation.php">Réserver une place</a>
     <a href="logout.php">Déconnexion</a>
 </div>
 
